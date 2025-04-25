@@ -1,0 +1,30 @@
+---
+---
+{%- assign page_language = page.collection | default: site.anurina.locale.default | default: 'en-US' -%}
+{%- assign home_page_url = site[page_language] | where_exp: "item", "item.layout == 'home'" | map: "url" | first | remove: "index.html" | default: "404" -%}
+{%- if jekyll.environment != 'production' -%}
+<!-- (layout: index) page_language: {{ page_language }} -->
+<!-- (layout: index) home_page_url: {{ home_page_url }} -->
+{% raw %}{% endraw -%}{%- endif -%}
+<!DOCTYPE html>
+<html lang="{{ page_language }}">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="refresh" content="0; url={{ home_page_url | relative_url }}">
+        <script type="text/javascript">
+            setTimeout(
+                ()=> { window.location.href = "{{ home_page_url | relative_url }}" },
+                50
+            );
+        </script>
+        <title>Index Page Redirection</title>
+    </head>
+    <body>
+        {%- if content != '' -%}
+            {{ content }}
+        {%- else -%}
+            {%- comment -%}Note: don't tell people to `click` the link, just tell them that it is a link.{%- endcomment -%}
+            If you are not redirected automatically, follow this <a href='{{ home_page_url | relative_url }}'>link</a> to see index page.
+        {%- endif -%}
+    </body>
+</html>

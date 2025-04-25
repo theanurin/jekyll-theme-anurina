@@ -1,25 +1,25 @@
 ---
 ---
-{%- assign page_language = page.collection | default: site.language_default | default: 'uk-UA' -%}
-<!DOCTYPE html>
+{%- assign page_language = page.collection | default: site.anurina.locale.default | default: 'en-US' -%}
+{%- raw %}{% endraw %}<!DOCTYPE html>
+{%- if jekyll.environment != 'production' -%}
+<!-- (layout: base) site.anurina.locale.default: {{ site.anurina.locale.default }} -->
+<!-- (layout: base) site.anurina.locale.sequence: {{  site.anurina.locale.sequence | join: ", " }} -->
+<!-- (layout: base) site.permalink: {{ site.permalink }} -->
+<!-- (layout: base) site.collections_dir: {{ site.collections_dir }} -->
+<!-- (layout: base) page_language: {{ page_language }} -->
+{% raw %}{% endraw -%}{%- endif -%}
 <html lang="{{ page_language }}">
   {%- include head.html -%}
-  <body>
-    <div class="background-header"></div>
-    <div class="body-outer">
-      <div class="body-middle">
-        <div class="body-content">
-          {%- include header.html -%}
-          <main class="page-content" aria-label="Content">
-            <div class="wrapper">
-              {{ content }}
-            </div>
-          </main>
-          {%- include footer.html -%}
-        </div>
-      </div>
-    </div>
-    <div class="background-footer"></div>
-    <script src="{{ '/assets/js/script.js' | relative_url }}"></script>
+{%- raw %}{% endraw %}  <body>
+    <div class="container{% if site.anurina.bootstrap.body_container_suffix %}-{{ site.anurina.bootstrap.body_container_suffix }}{% endif %}">
+{% include content-header.html -%}
+{%- raw %}{% endraw %}      <main class="main-content" aria-label="Content">
+{{ content }}
+{%- raw %}{% endraw %}      </main>
+{% include content-footer.html %}
+{%- raw %}{% endraw %}    </div>
+{% include bootstrap-script.html -%}
+{%- raw %}{% endraw %}    <script src="{{ '/assets/js/script.js' | relative_url }}"></script>
   </body>
 </html>

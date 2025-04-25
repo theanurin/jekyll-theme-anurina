@@ -1,49 +1,82 @@
 # jekyll-theme-anurina
 
-Welcome to your new Jekyll theme! In this directory, you'll find the files you need to be able to package up your theme into a gem. Put your layouts in `_layouts`, your includes in `_includes`, your sass files in `_sass` and any other assets in `assets`.
+Just another one theme with following features:
 
-To experiment with this code, add some sample content and run `bundle exec jekyll serve` – this directory is setup just like a Jekyll site!
+- Multi-language support based on collections
+- TBD
+- TBD
+- TBD
 
-TODO: Delete this and the text above, and describe your gem
+Inspired by [Minima](https://github.com/jekyll/minima/blob/79af56ab8c586ebcfaff136c1378b79e0c38abb2/README.md)
 
-## Installation
+## Get Started
 
-Add this line to your Jekyll site's `Gemfile`:
+1. Create a new Jekyll site
+    ```shell
+    TBD
+    ```
+1. Add this line to your Jekyll site's `Gemfile`:
+    ```ruby
+    gem "jekyll-theme-anurina"
+    ```
+1. And add following lines to your Jekyll site's `_config.yml`:
+    ```yaml
+    theme: jekyll-theme-anurina
 
-```ruby
-gem "jekyll-theme-anurina"
-```
+    #
+    # Explicitly set root directory for collections
+    #
+    # Default: content
+    #
+    collections_dir: content
 
-And add this line to your Jekyll site's `_config.yml`:
+    #
+    # Configure locale features
+    #
+    locale:
+        #
+        # Set default locale for the site
+        #
+        default: uk-UA
 
-```yaml
-theme: jekyll-theme-anurina
-```
+        #
+        # Define locales (with priority)
+        #
+        sequence:
+        - uk-UA
+        - en-US
+        - de-DE
 
-And then execute:
+    #
+    # Select color scheme:
+    #
+    #   light - Default, light color scheme.
+    #   dark - Dark variant of the light color scheme.
+    #   auto - Adaptive color scheme based on the default light and dark color schemes.
+    #
+    # Default: auto
+    #
+    color_scheme: dark
 
-    $ bundle
+    #
+    # Select layout kinds
+    #
+    layout_kind:
+        "404": default
+        cv: default
 
-Or install it yourself as:
-
-    $ gem install jekyll-theme-anurina
-
-## Usage
-
-TODO: Write usage instructions here. Describe your available layouts, includes, sass and/or assets.
+    #
+    # Configure set of social links
+    #
+    social_links:
+        - { platform: youtube,        url: "https://www.youtube.com/@theanurin42" }
+        - { platform: telegram,       url: "https://t.me/theanurin" }
+        - { platform: github,         url: "https://github.com/theanurin" }
+    ```
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/jekyll-theme-anurina. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](https://www.contributor-covenant.org/) code of conduct.
-
-## Development
-
-To set up your environment to develop this theme, run `bundle install`.
-
-Your theme is setup just like a normal Jekyll site! To test your theme, run `bundle exec jekyll serve` and open your browser at `http://localhost:4000`. This starts a Jekyll server using your theme. Add pages, documents, data, etc. like normal to test your theme's contents. As you make modifications to your theme and to your content, your site will regenerate and you should see the changes in the browser after a refresh, just like normal.
-
-When your theme is released, only the files in `_layouts`, `_includes`, `_sass` and `assets` tracked with Git will be bundled.
-To add a custom directory to your theme-gem, please edit the regexp in `jekyll-theme-anurina.gemspec` accordingly.
+Bug reports and pull requests are welcome on GitHub at https://github.com/theanurin/jekyll-theme-anurina. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](https://www.contributor-covenant.org/) code of conduct.
 
 ## License
 

@@ -1,0 +1,62 @@
+title: Set 'title' in your _config.yml
+
+author:
+  name: Set 'author->name' in your _config.yml
+  email: set-your-email-in-config-yml@example.org
+
+#
+# Default settings for the theme "jekyll-theme-anurina"
+#
+anurina:
+  #
+  # Configure Bootstrap
+  #
+  bootstrap:
+    #
+    # Select Bootstrap's assets source
+    #
+    # - jsdelivr  - use CDN https://www.jsdelivr.com/. See more in Bootstrap's doc https://getbootstrap.com/docs/5.2/getting-started/download/#cdn-via-jsdelivr.
+    # - local     - use local copy of Bootstrap assets
+    #
+    #source: jsdelivr
+    source: local
+
+  locale:
+    #
+    # Set default locale for the site
+    #
+    default: en-US
+
+    #
+    # Define locales (with priority)
+    #
+    sequence:
+      - en-US
+      - de-DE
+      - fr-FR
+      - uk-UA
+
+  #
+  # Configure Menu Pages (pages that shown in menu bar)
+  #
+  menuable:
+    - index.markdown
+    - about.markdown
+
+  #
+  # Select color scheme:
+  #
+  #   light - Default, light color scheme.
+  #   dark - Dark variant of the light color scheme.
+  #   auto - Adaptive color scheme based on the default light and dark color schemes.
+  #
+  # Default: auto
+  #
+  color_scheme: dark
+
+  #
+  # Select layout kinds
+  #
+  layout_kind:
+      "404": default
+      cv: default

@@ -1,0 +1,122 @@
+---
+layout: page
+---
+
+{%- comment -%}
+Page Front Matters:
+- summary_grid_merge_locales = "yes" | true - Merge children across all locales.
+- summary_grid_child_template = "summary-grid-child-default-template" - Set template for child items (pls omit .html).
+{%- endcomment -%}
+
+{%- assign page_language = page.collection | default: site.anurina.locale.default | default: 'uk-UA' -%}
+{%- assign locale_collections = site.collections | where_exp: "item", "item.label != 'posts' and item.label != 'drafts'" | sort: "lang_sort_order" -%}
+{%- assign page_collection = site.collections | where_exp: "item", "item.label == page.collection" | first -%}
+{%- capture page_language_dir %}{{ page_collection.relative_directory }}/{% endcapture -%}
+{%- assign summary_grid_name = page.path | split: page_language_dir | last | remove: "/index.md" | remove: "/index.markdown" | remove: "/index.html" -%}
+{%- assign summary_grid_children_directory = page.path | split: page_language_dir | last | remove: "/index.md" | remove: "/index.markdown" | remove: "/index.html" | append: "/" -%}
+
+{%- if page.summary_grid_merge_locales == "yes" or page.summary_grid_merge_locales == true -%}
+    {%- assign summary_grid_merge_locales = true -%}
+{%- else -%}
+    {%- assign summary_grid_merge_locales = false -%}
+{%- endif -%}
+
+{%- if page.summary_grid_children -%}
+    {%- assign summary_grid_children_names = "" | split: "," -%}
+    {%- assign summary_grid_children = page.summary_grid_children | split: "," -%}
+    {%- for summary_grid_child_page in summary_grid_children -%}
+        {%- assign friendly_summary_page = summary_grid_child_page | strip -%}
+        {%- assign summary_grid_children_names = summary_grid_children_names | push: friendly_summary_page -%}
+    {%- endfor -%}
+{%- else -%}
+    {%- assign summary_grid_children_names = "" | split: ',' -%}
+    {%- assign sorted_documents = site.documents | sort: "priority" | reverse -%}
+    {%- if summary_grid_merge_locales -%}
+        {%- for locale_collection in locale_collections -%}
+            {%- for document in sorted_documents -%}
+                {%- if document.name != 'index.html' and document.name != 'index.md' and document.name != 'index.markdown' -%}
+                    {%- capture expected_summary_page_path %}{{ locale_collection.relative_directory }}/{{ summary_grid_children_directory }}{{ document.name }}{% endcapture -%}
+                    {%- if expected_summary_page_path == document.path -%}
+                        {% unless summary_grid_children_names contains document.slug %}
+                        {% assign summary_grid_children_names = summary_grid_children_names | push: document.slug %}
+                        {% endunless %}
+                    {%- endif -%}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endfor -%}
+    {%- else -%}
+        {%- for document in sorted_documents -%}
+            {%- if document.name != 'index.html' and document.name != 'index.md' and document.name != 'index.markdown' -%}
+                {%- capture expected_summary_page_path %}{{ page_collection.relative_directory }}/{{ summary_grid_children_directory }}{{ document.name }}{% endcapture -%}
+                {%- if expected_summary_page_path == document.path -%}
+                    {% unless summary_grid_children_names contains document.slug %}
+                    {% assign summary_grid_children_names = summary_grid_children_names | push: document.slug %}
+                    {% endunless %}
+                {%- endif -%}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endif -%}
+{%- endif -%}
+{%- assign summary_grid_children_names = summary_grid_children_names | uniq -%}
+
+
+{%- assign locale_sorted_document_groups = site.documents -%}
+
+{%- assign grouped = locale_sorted_document_groups | group_by: "slug" -%}
+{%- for item in grouped -%}
+{%- assign sorted = item["items"] | sort: "collection" | reversed -%}
+{%- if forloop.first -%}
+{%- assign locale_sorted_document_groups = sorted -%}
+{%- else -%}
+{%- assign locale_sorted_document_groups = locale_sorted_document_groups | concat: sorted -%}
+{%- endif -%}
+{%- endfor -%}
+
+{%- assign summary_grid_children_pages = "" | split: ',' -%}
+{%- for sorted_summary_child_name in summary_grid_children_names -%}
+
+    {%- capture expected_summary_page_path %}{{ page_collection.relative_directory }}/{{ summary_grid_children_directory }}{{ sorted_summary_child_name }}{% endcapture -%}
+    {%- assign summary_grid_child_page = site.documents | where_exp: "item", "item.collection == page_language and item.path contains expected_summary_page_path and item.slug == sorted_summary_child_name" | first -%}
+    {%- unless summary_grid_child_page -%}
+        {%- if summary_grid_merge_locales -%}
+            {%- assign summary_grid_child_page = locale_sorted_document_groups | where_exp: "item", "item.slug == sorted_summary_child_name" | first -%}
+        {%- endif -%}
+    {%- endunless -%}
+    {%- if summary_grid_child_page -%}
+        {% assign summary_grid_children_pages = summary_grid_children_pages | push: summary_grid_child_page %}
+    {%- endif -%}
+{%- endfor -%}
+
+{%- if jekyll.environment != 'production' -%}
+<!-- (layout: summary-grid) locales: {{ locale_collections | map: "label" | join: ", " }} -->
+<!-- (layout: summary-grid) page_language: {{ page_language }} -->
+<!-- (layout: summary-grid) page_language_dir: {{ page_language_dir }} -->
+<!-- (layout: summary-grid) page path: {{ page.path }} -->
+<!-- (layout: summary-grid) summary_grid_merge_locales: {{ summary_grid_merge_locales }} -->
+<!-- (layout: summary-grid) summary_grid_children_directory: {{ summary_grid_children_directory }} -->
+<!-- (layout: summary-grid) summary_grid_children_names: {{ summary_grid_children_names | join: ", "}} -->
+<!-- (layout: summary-grid) summary_grid_children_pages (paths): {{ summary_grid_children_pages | map: "path" | join: ", "}} -->
+{%- endif -%}
+<div class="container-fluid container-layout">
+    {{ content }}
+    <div class="card-deck text-center">
+        <div class="row">
+        {%- for summary_grid_child_page in summary_grid_children_pages -%}
+            {%- if summary_grid_child_page.summary_grid_child_template -%}
+                {%- capture summary_grid_child_template %}{{ summary_grid_child_page.summary_grid_child_template }}.html{% endcapture -%}
+            {%- elsif page.summary_grid_child_template -%}
+                {%- capture summary_grid_child_template %}{{ page.summary_grid_child_template }}.html{% endcapture -%}
+            {%- else -%}
+                {%- capture summary_grid_child_template %}{{summary_grid_name}}-child-template.html{% endcapture -%}
+            {%- endif -%}
+            {%- if jekyll.environment != 'production' -%}
+            <!-- (layout: summary-grid) summary_grid_child_page name: {{ summary_grid_child_page.name }} -->
+            <!-- (layout: summary-grid) summary_grid_child_template: {{ summary_grid_child_template }} -->
+            {%- endif -%}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3 col-xxl-3 mb-4">
+                {% include {{ summary_grid_child_template }} summary_grid_child_page=summary_grid_child_page -%}
+            </div>
+        {%- endfor -%}
+        </div>
+    </div>
+</div>

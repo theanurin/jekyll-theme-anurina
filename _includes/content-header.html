@@ -1,0 +1,53 @@
+{%- assign page_language = page.collection | default: site.anurina.locale.default | default: 'en-US' -%}
+{%- assign home_page_url = site[page_language] | where_exp: "item", "item.layout == 'home'" | map: "url" | first | remove: "index.html" | default: "404" -%}
+{%- assign locales = site.anurina.locale.sequence -%}
+{%- assign unique_page_names = site.documents | where_exp: "item", "item.layout == 'page' or item.layout == 'home'" | map: "name" | uniq -%}
+{%- assign menu_content_pages = "" | split: ',' -%}
+{%- for menu_page_name in site.anurina.menuable -%}
+  {%- assign menu_page = site[page_language] | where_exp: "item", "item.name == menu_page_name" | first -%}
+  {%- if menu_page -%}
+    {% assign menu_content_pages = menu_content_pages | push: menu_page %}
+  {%- else -%}
+    {%- assign menu_page_lang_variants = "" | split: ',' -%}
+    {%- for locale in locales -%}
+      {%- assign localized_menu_page = site[locale] | where_exp: "item", "item.name == menu_page_name" | first -%}
+      {%- if localized_menu_page %}
+        {% assign menu_page_lang_variants = menu_page_lang_variants | push: localized_menu_page %}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- assign localized_menu_page = menu_page_lang_variants | first -%}
+    {%- assign menu_content_pages = menu_content_pages | push: localized_menu_page -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign menu_content_pages_size = menu_content_pages | size -%}
+{%- if jekyll.environment != 'production' -%}
+<!-- (include: content-header) page_language: {{ page_language }} -->
+<!-- (include: content-header) locales: {{ locales | join: ", " }} -->
+<!-- (include: content-header) unique_post_names: {{ unique_post_names | join: ", " }} -->
+{%- endif -%}
+{%- raw %}{% endraw %}          <header class="site-header">
+            <div class="wrapper">
+              <a class="site-title" rel="author" href="{{ home_page_url | relative_url }}">{{ site.title | escape }}</a>
+              <nav class="site-nav">
+                {%- include social.html -%}
+                {%- if menu_content_pages_size > 0 -%}
+                <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+                <label for="nav-trigger">
+                  <span class="menu-icon">
+                    <svg viewBox="0 0 18 15" width="18px" height="15px">
+                      <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+                    </svg>
+                  </span>
+                </label>
+                <div class="trigger">
+                  {%- for menu_content_page in menu_content_pages -%}
+                    {%- assign menu_content_page_title = menu_content_page.menu_title | default: menu_content_page.title -%}
+                    {%- assign page_link_url = menu_content_page.url | remove: "index.html" | remove: ".html" -%}
+                  <a class="page-link" href="{{ page_link_url | relative_url }}">{{ menu_content_page_title | escape }}</a>
+                  {%- endfor -%}
+                </div>
+                {%- endif -%}
+                {%- include language_selector.html -%}
+            </nav>
+            </div>
+          </header>

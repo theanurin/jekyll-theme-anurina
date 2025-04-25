@@ -1,9 +1,14 @@
 ---
 layout: base
 ---
-{%- assign page_language = page.collection | default: site.language_default -%}
-{%- assign languages = site.collections | where_exp: "item", "item.label != 'posts' and item.label != 'drafts'" | sort: "lang_sort_order" | reverse -%}
+{%- assign page_language = page.collection | default: site.anurina.locale.default | default: 'en-US' -%}
+{%- assign locales = site.anurina.locale.sequence -%}
 {%- assign unique_post_names = site.documents | where_exp: "item", "item.layout == 'post'" | map: "name" | uniq -%}
+{%- if jekyll.environment != 'production' -%}
+<!-- (layout: home) page_language: {{ page_language }} -->
+<!-- (layout: home) locales: {{ locales | join: ", " }} -->
+<!-- (layout: home) unique_post_names: {{ unique_post_names | join: ", " }} -->
+{% raw %}{% endraw -%}{%- endif -%}
 <div class="home">
   {{ content }}
 
@@ -18,15 +23,15 @@ layout: base
       {%- if post -%}
         {%- assign posts = posts | push: post -%}
       {%- else -%}
-        {%- assign lang_posts = "" | split: ',' -%}
-        {%- for language in languages -%}
-          {%- assign translated_page = site.documents | where_exp: "item", "item.layout == 'post' and item.name == unique_post_name" | where: "collection", language.label | first -%}
-          {%- if translated_page %}
-            {% assign lang_posts = lang_posts | push: translated_page %}
+        {%- assign translated_post_documents = "" | split: ',' -%}
+        {%- for locale in locales -%}
+          {%- assign translated_post_document = site.documents | where_exp: "item", "item.layout == 'post' and item.name == unique_post_name" | where: "collection", locale | first -%}
+          {%- if translated_post_document %}
+            {% assign translated_post_documents = translated_post_documents | push: translated_post_document %}
           {%- endif -%}
         {%- endfor -%}
-        {%- assign post = lang_posts | first -%}
-        {%- assign posts = posts | push: post -%}
+        {%- assign first_translated_post_document = translated_post_documents | first -%}
+        {%- assign posts = posts | push: first_translated_post_document -%}
       {%- endif -%}
     {%- endfor -%}
     {% assign posts = posts | sort: "date" | reverse %}
@@ -36,7 +41,8 @@ layout: base
       <li>
         <span class="post-meta">{{ post.date | date: date_format }}</span>
         <h3>
-          <a class="post-link" href="{{ post.url | relative_url }}">
+          {%- assign post_url = post.url | remove: "index.html" | remove: ".html" -%}
+          <a class="post-link" href="{{ post_url | relative_url }}">
             {{ post.title | escape }}
           </a>
         </h3>
@@ -50,13 +56,15 @@ layout: base
       <div class="pager">
         <ul class="pagination">
         {%- if paginator.previous_page %}
-          <li><a href="{{ paginator.previous_page_path | relative_url }}" class="previous-page">{{ paginator.previous_page }}</a></li>
+          {%- assign previous_page_url = paginator.previous_page_path | remove: "index.html" | remove: ".html" -%}
+          <li><a href="{{ previous_page_url | relative_url }}" class="previous-page">{{ paginator.previous_page }}</a></li>
         {%- else %}
           <li><div class="pager-edge">•</div></li>
         {%- endif %}
           <li><div class="current-page">{{ paginator.page }}</div></li>
         {%- if paginator.next_page %}
-          <li><a href="{{ paginator.next_page_path | relative_url }}" class="next-page">{{ paginator.next_page }}</a></li>
+          {%- assign next_page_url = paginator.next_page_path | remove: "index.html" | remove: ".html" -%}
+          <li><a href="{{ next_page_url | relative_url }}" class="next-page">{{ paginator.next_page }}</a></li>
         {%- else %}
           <li><div class="pager-edge">•</div></li>
         {%- endif %}

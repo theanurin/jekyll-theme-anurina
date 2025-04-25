@@ -6,7 +6,7 @@
         <!-- <p class="feed-subscribe">
           <a href="{{ site.feed.path | default: 'feed.xml' | absolute_url }}">
             <svg class="svg-icon icon-orange">
-              <use xlink:href="{{ 'assets/anurina-social-icons.svg#rss' | relative_url }}"></use>
+              <use xlink:href="{{ '/assets/anurina-social-icons.svg#rss' | relative_url }}"></use>
             </svg><span>Subscribe</span>
           </a>
         </p> -->
@@ -27,7 +27,7 @@
     </div>
     <div class="social-links">
       {%- include social.html -%}
-      {%- include menu-flags.html -%}
+      {%- include language_selector.html -%}
     </div>
   </div>
 </footer>

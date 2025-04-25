@@ -1,15 +1,6 @@
-<ul class="social-media-list">
 {%- assign social_links = site.anurina.social_links -%}
+<ul class="social-media-list">
 {%- for social_link in social_links -%}
-  {% case social_link.platform %}
-  {% when "youtube" %}
-    {%- include social-item.html item = social_link color = '#FF0000' -%}
-  {% when "github" %}
-    {%- include social-item.html item = social_link color = '#000000' -%}
-  {% when "telegram" %}
-    {%- include social-item.html item = social_link color = '#2AABEE' -%}
-  {% else %}
-    {%- include social-item.html item = social_link -%}
-  {% endcase %}
+  {%- include social_item.html item = social_link -%}
 {%- endfor -%}
 </ul>
