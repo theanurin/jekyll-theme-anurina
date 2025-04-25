@@ -36,5 +36,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "jekyll-theme-anurina-bootstrap", "~> 0.0.3"
   spec.add_runtime_dependency "jekyll-seo-tag", "~> 2.8.0"
 
-  spec.add_development_dependency "bundler", "~> 2.4.19"
+  spec.add_development_dependency "bundler", ">= 2.6.3"
 end
