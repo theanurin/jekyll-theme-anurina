@@ -7,6 +7,8 @@ Just another one theme with following features:
 - TBD
 - TBD
 
+Inspired by [Minima](https://github.com/jekyll/minima/blob/79af56ab8c586ebcfaff136c1378b79e0c38abb2/README.md)
+
 ## Get Started
 
 1. Create a new Jekyll site
@@ -21,7 +23,11 @@ Just another one theme with following features:
     ```yaml
     theme: jekyll-theme-anurina
 
-    # Explicitly set root directory for collections (may be omitted)
+    #
+    # Explicitly set root directory for collections
+    #
+    # Default: content
+    #
     collections_dir: content
 
     #
@@ -40,6 +46,32 @@ Just another one theme with following features:
         - uk-UA
         - en-US
         - de-DE
+
+    #
+    # Select color scheme:
+    #
+    #   light - Default, light color scheme.
+    #   dark - Dark variant of the light color scheme.
+    #   auto - Adaptive color scheme based on the default light and dark color schemes.
+    #
+    # Default: auto
+    #
+    color_scheme: dark
+
+    #
+    # Select layout kinds
+    #
+    layout_kind:
+        "404": default
+        cv: default
+
+    #
+    # Configure set of social links
+    #
+    social_links:
+        - { platform: youtube,        url: "https://www.youtube.com/@theanurin42" }
+        - { platform: telegram,       url: "https://t.me/theanurin" }
+        - { platform: github,         url: "https://github.com/theanurin" }
     ```
 
 ## Contributing

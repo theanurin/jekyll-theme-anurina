@@ -42,3 +42,21 @@ anurina:
   menuable:
     - index.markdown
     - about.markdown
+
+  #
+  # Select color scheme:
+  #
+  #   light - Default, light color scheme.
+  #   dark - Dark variant of the light color scheme.
+  #   auto - Adaptive color scheme based on the default light and dark color schemes.
+  #
+  # Default: auto
+  #
+  color_scheme: dark
+
+  #
+  # Select layout kinds
+  #
+  layout_kind:
+      "404": default
+      cv: default
